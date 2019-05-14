@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+  <div class="site-wrap">
+
+    <h1>Slide in on Scroll</h1>
+
+ 
+    <img src="http://unsplash.it/400/400" class="align-left slide-in">
+
+    <img src="http://unsplash.it/400/401" class="align-right slide-in">
+
+    <img src="http://unsplash.it/200/500" class="align-left slide-in">
+
+    <img src="http://unsplash.it/400/400" class="align-right slide-in">
+
+
+
+
+  </div>
+
+  <script>
+    function debounce(func, wait = 20, immediate = true) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    }
+
+     const slider = document.querySelectorAll('.slide-in');
+
+     function checkSlide(e){
+         slider.forEach(slideImage => {
+             const slideIn = (window.scrollY + window.innerHeight) - slideImage.height / 2;
+            const imageBottom = slideImage.offsetTop + slideImage.height;
+            
+            const isHalf = slideIn > slideImage.offsetTop;
+            const isNotHalf = window.scrollY < imageBottom;
+
+            if (isHalf && isNotHalf){
+                slideImage.classList.add('active');
+            }else{
+                slideImage.classList.remove('active');
+            }
+        
+        
+        })
+     }
+
+     window.addEventListener('scroll', debounce(checkSlide));
+  </script>
+
+  <style>
+    html {
+      box-sizing: border-box;
+      background: #ffc600;
+      font-family: 'helvetica neue';
+      font-size: 20px;
+      font-weight: 200;
+    }
+    
+    body {
+      margin: 0;
+    }
+    
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .site-wrap {
+      max-width: 700px;
+      margin: 100px auto;
+      background: white;
+      padding: 40px;
+      text-align: justify;
+    }
+
+    .align-left {
+      float: left;
+      margin-right: 20px;
+    }
+
+    .align-right {
+      float: right;
+      margin-left: 20px;
+    }
+
+    .slide-in {
+      opacity: 0;
+      transition: all .5s;
+    }
+
+    .align-left.slide-in {
+      transform: translateY(30%) scale(0.95);
+    }
+    /*.align-left.slide-in {
+      transform: translateX(-30%) scale(0.95);
+    }*/
+    
+    .align-right.slide-in {
+      transform: translateY(30%) scale(0.95);
+    }
+    /*.align-right.slide-in {
+      transform: translateX(30%) scale(0.95);
+    }*/
+
+    .slide-in.active {
+      opacity: 1;
+      transform: translateY(0%) scale(1);
+    }
+
+  </style>
+
+</body>
+</html>
